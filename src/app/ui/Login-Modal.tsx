@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { LoginComponent } from '../login/page';
+// import { LoginComponent } from '../login/page';
 import Modal from '@mui/material/Modal';
 import { logout } from '@/app/lib/actions'
 
@@ -21,6 +21,20 @@ const style = {
     p: 4,
 };
 
+
+function LoginComponent() {
+  return (
+    <form className='flex'>
+      <label htmlFor="email">Email:</label>
+      <input id="email" name="email" type="email" required />
+      <label htmlFor="password">Password:</label>
+      <input id="password" name="password" type="password" required />
+
+      <button formAction={login}>Log in</button>
+      <button formAction={signup}>Sign up</button>
+    </form>
+  )
+}
 
 export default function LoginModal() {
     const [open, setOpen] = React.useState(false);
