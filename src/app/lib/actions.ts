@@ -95,6 +95,7 @@ export async function getWatchedMovies( start: number, end: number): Promise<Mov
   const table = 'watched_films'
 
   if (end === 0) {
+    
     return [] as MovieProps[]
   }
 
@@ -106,8 +107,8 @@ export async function getWatchedMovies( start: number, end: number): Promise<Mov
     if (error) {
       console.error(error)
     }
+
     return movies || [] as MovieProps[]
-  
 }
 
 export async function getWatchedMovieCount(): Promise<number> {
@@ -119,6 +120,7 @@ export async function getWatchedMovieCount(): Promise<number> {
   if (error) {
     console.error(error)
   }
+
   return count || 0
 }
 
