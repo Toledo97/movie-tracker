@@ -41,6 +41,7 @@ export const calculateDBIdx = (currentPage: number, totalMovies: number, pageSiz
   startIdx = (startIdx < pageGap) ? ((currentPage - 1) * pageSize) : pageGap
   
   const endIdx = (startIdx + 9 < totalMovies) ? startIdx + 9 : totalMovies
+  
   return [startIdx, endIdx]
 }
 

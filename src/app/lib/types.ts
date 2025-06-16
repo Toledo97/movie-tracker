@@ -21,6 +21,6 @@ export interface ButtonProps extends React.PropsWithChildren {
     title?: string;
     baseColor?: string;
     textColor?: string;
-    type?: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>;
+    type?: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>>;
 }
 
