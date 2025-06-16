@@ -90,14 +90,15 @@ export async function getMovieCount(table: string): Promise<number> {
 }
 
 
-export async function getWatchedMovies( start: number, end: number): Promise<MovieProps[]> {
+export async function getWatchedMovies( start: number, end: number, count?: number): Promise<MovieProps[]> {
   const supabase = await createClient()
   const table = 'watched_films'
 
-  if (end === 0) {
+  if (count === 0) {
     
     return [] as MovieProps[]
   }
+
 
   
     const { data: movies, error } = await supabase
