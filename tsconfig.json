@@ -21,11 +21,13 @@
                 "name": "next"
             }
         ],
+        
         "paths": {
             "@/*": [
                 "./src/*"
             ]
         },
+        
         "target": "ES2023"
     },
     "include": [

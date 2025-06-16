@@ -1,12 +1,29 @@
-import HomePage from '@/app/(delete-this-and-modify-page.tsx)/HomePage';
+import Dashboard from '@/app/(dashboard)/Dashboard';
+import { createClient } from '@/app/utils/supabase/server'
+import { setWatched, removeWatched } from '@/app/lib/actions'
 
-/**
- * The main page component that renders the HomePage component.
- *
- * @returns {JSX.Element} The rendered HomePage component.
- */
-const Page = () => {
-    return <HomePage />;
+export default async function Page(props: {
+    searchParams?: Promise<{
+        query?: string;
+        table?: number;
+        movie_id?: number;
+        page?: number;
+        page2?: number;
+    }>;
+}
+) {
+    const searchParams = await props.searchParams;
+    const currentPage = Number(searchParams?.page) || 1;
+    const currentPage2 = Number(searchParams?.page2) || 1;
+
+    const tables = ['all_films', 'all_films_filtered_watched'];
+    const table = tables[searchParams?.table || 0];
+
+    const query = searchParams?.query || '';
+
+    return (
+        <>
+            <Dashboard currentPage={currentPage} currentPage2={currentPage2} table={table} />;
+        </>
+    )
 };
-
-export default Page;
