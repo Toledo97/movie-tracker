@@ -1,4 +1,7 @@
 // props
+
+import React from 'react';
+
 export interface MovieProps {
     title: string;
     release_date: string;
@@ -14,13 +17,5 @@ export interface MovieProps {
 export interface GallaryProps {
     title: string;
     total: number;
-}
-
-export interface ButtonProps extends React.PropsWithChildren {
-    handleAction?: () => void;
-    title?: string;
-    baseColor?: string;
-    textColor?: string;
-    type?: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>>;
 }
 
