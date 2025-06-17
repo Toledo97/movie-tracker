@@ -1,6 +1,4 @@
 import Dashboard from '@/app/(dashboard)/Dashboard';
-import { createClient } from '@/app/utils/supabase/server'
-import { setWatched, removeWatched } from '@/app/lib/actions'
 
 export default async function Page(props: {
     searchParams?: Promise<{
