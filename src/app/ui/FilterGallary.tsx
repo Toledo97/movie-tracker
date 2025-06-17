@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
-export default function FilterCheck(){
+export default function FilterCheck() {
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -14,12 +14,12 @@ export default function FilterCheck(){
         params.set('table', `${table}`);
 
         params.set('page', '1');
-        
-        if (params.has('action')){
+
+        if (params.has('action')) {
             params.delete('action')
             params.delete('movie_id')
         }
-        
+
         replace(`${pathname}?${params.toString()}`)
     };
 
@@ -37,17 +37,17 @@ export default function FilterCheck(){
     };
 
 
-    return(
+    return (
         <div className='flex flex-row gap-2 content-center'>
 
-                    <input
-                        type="checkbox"
-                        onChange={handleChange}
-                    />
+            <input
+                type="checkbox"
+                onChange={handleChange}
+            />
 
-                    <div className='text-md'>
-                        Filter Watched
-                    </div>
-                </div>
+            <div className='text-md'>
+                Filter Watched
+            </div>
+        </div>
     )
 }

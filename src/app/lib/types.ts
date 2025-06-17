@@ -19,3 +19,10 @@ export interface GallaryProps {
     total: number;
 }
 
+export interface ButtonProps extends React.PropsWithChildren {
+    handleAction?: () => void;
+    title?: string;
+    baseColor?: string;
+    textColor?: string;
+}
+

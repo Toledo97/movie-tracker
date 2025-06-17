@@ -13,12 +13,11 @@ export default async function Page(props: {
 }
 ) {
     const searchParams = await props.searchParams;
-    const currentPage = Number(searchParams?.page) || 1;
-    const currentPage2 = Number(searchParams?.page2) || 1;
+    const currentPage = Number(searchParams?.page || 1);
+    const currentPage2 = Number(searchParams?.page2 || 1);
 
     const tables = ['all_films', 'all_films_filtered_watched'];
     const table = tables[searchParams?.table || 0];
-
     const query = searchParams?.query || '';
 
     return (

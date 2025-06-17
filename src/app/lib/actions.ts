@@ -22,7 +22,7 @@ export async function login(formData: FormData) {
 
   const userData = await supabase.auth.getUser()
   await saveCookies(!!userData.data.user || false)
-  revalidatePath('/table=0&page=1', 'layout')
+  revalidatePath('/?table=0&page=1', 'layout')
   redirect('/table=0&page=1')
 }
 

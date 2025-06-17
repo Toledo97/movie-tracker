@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 // import { LoginComponent } from '../login/page';
 import Modal from '@mui/material/Modal';
-import { logout } from '@/app/lib/actions'
+import { login, signup, logout } from '@/app/lib/actions'
 
 import '@/app/ui/button.css'
 
