@@ -23,7 +23,7 @@ export async function login(formData: FormData) {
   const userData = await supabase.auth.getUser()
   await saveCookies(!!userData.data.user || false)
   revalidatePath('/?table=0&page=1', 'layout')
-  redirect('/table=0&page=1')
+  redirect('/?table=0&page=1')
 }
 
 export async function saveCookies(userExists: boolean) {
@@ -38,9 +38,14 @@ export async function logout() {
   const supabase = await createClient()
   const { error } = await supabase.auth.signOut()
 
+  const cookieStore = await cookies();
+  cookieStore.delete('user');
+
   if (error) {
     redirect('/error')
   }
+  revalidatePath('/?table=0&page=1', 'layout')
+  redirect('/?table=0&page=1')
 }
 
 

@@ -1,5 +1,3 @@
-// components/Layout.js
-
 import React from 'react';
 import Link from 'next/link';
 import { createClient } from '@/app/utils/supabase/server'
