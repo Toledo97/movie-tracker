@@ -9,14 +9,15 @@ import Pagination from '@/app/ui/Pagination'
 import FilterCheck from '@/app/ui/FilterGallary'
 import { Suspense } from 'react';
 import Loading from '@/app/loading'
+import { cookies } from 'next/headers'
 
 import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies } from '@/app/lib/actions'
 import { calculateDBIdx } from '@/app/utils/utils'
 
 export default async function Dashboard({  currentPage, currentPage2, table }: { currentPage: number, currentPage2: number, table: string }) {
 
-    console.log('my main table: ', 'all_films')
-    console.log('current table: ', table)
+    const cookieStore = await cookies();
+    const hasCookie = cookieStore.has('user');
 
     const [totalMovies, totalWatchedMovies] = await Promise.all(
         [
@@ -60,7 +61,7 @@ export default async function Dashboard({  currentPage, currentPage2, table }: {
                             </div>
                         </Suspense>
 
-                        { GallaryData1.title && 
+                        { hasCookie && 
                             <FilterCheck/>
                         }
 

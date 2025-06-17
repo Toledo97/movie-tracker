@@ -2,9 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { createClient } from '@/app/utils/supabase/server'
 import LoginModal, { LogoutButton } from '@/app/ui/Login-Modal'
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { cookies } from 'next/headers'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = async () => {
     const supabase = await createClient();
