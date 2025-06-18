@@ -23,6 +23,7 @@ export async function login(formState: FormState, formData: FormData): Promise<F
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
+
     return { error: { message: error.message } };
   }
 
@@ -105,6 +106,7 @@ export async function getWatchedMovies(start: number, end: number, count: number
   const table = 'watched_films'
 
   if (count === 0) {
+    
     return [] as MovieProps[]
   }
 
@@ -120,8 +122,8 @@ export async function getWatchedMovies(start: number, end: number, count: number
   if (error) {
     console.error(error)
   }
-  return movies || [] as MovieProps[]
 
+  return movies || [] as MovieProps[]
 }
 
 export async function getWatchedMovieCount(): Promise<number> {
