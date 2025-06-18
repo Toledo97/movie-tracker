@@ -14,7 +14,7 @@ import { cookies } from 'next/headers'
 import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies } from '@/app/lib/actions'
 import { calculateDBIdx } from '@/app/utils/utils'
 
-export default async function Dashboard({  currentPage, currentPage2, table }: { currentPage: number, currentPage2: number, table: string }) {
+export default async function Dashboard({ currentPage, currentPage2, table }: { currentPage: number, currentPage2: number, table: string }) {
 
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');
@@ -39,16 +39,16 @@ export default async function Dashboard({  currentPage, currentPage2, table }: {
     const [allMovies, allWatchedMovies] = await Promise.all(
         [
             getMovies(startIdx, endIdx, table),
-            getWatchedMovies( startIdxWatched, endIdxWatched, totalWatchedMovies)
+            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies)
         ]
     )
 
     return (
-        <main className='flex flex-col md:gap-16 gap-32'>
-            <div>
+        <main className='flex flex-col '>
+            <div className='h-20'> 
                 <Navbar />
             </div>
-            <div className="flex flex-col gap-4 p-4">
+            <div className="row-start-1flex flex-col gap-4 p-4 my-36">
                 <div>
                     <div className='flex flex-col gap-2 text-white px-4'>
                         <Suspense fallback={<Loading />}>
@@ -61,8 +61,8 @@ export default async function Dashboard({  currentPage, currentPage2, table }: {
                             </div>
                         </Suspense>
 
-                        { hasCookie && 
-                            <FilterCheck/>
+                        {hasCookie &&
+                            <FilterCheck />
                         }
 
                         <Suspense fallback={<Loading />}>
