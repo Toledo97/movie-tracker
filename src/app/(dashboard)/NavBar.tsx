@@ -18,7 +18,6 @@ const Navbar = async () => {
         if (!error && data.user) {
             userExists = true;
         }
-        // console.log('data ',data)
     }
 
     return (
@@ -28,6 +27,7 @@ const Navbar = async () => {
                             bg-opacity-75 text-light
                             fixed-top">
                 <div className="container flex flex-row justify-evenly md:justify-center gap-2">
+
 
                     <LogoComponent />
 

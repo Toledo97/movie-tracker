@@ -90,12 +90,10 @@ function BasicModal() {
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     <div className='text-center'>
-                        <b>Login / Sign Up </b><hr></hr>
+                        <b>Login</b><hr></hr>
                     </div>
                 </Typography>
-                {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
                 <LoginComponent />
-                {/* </Typography> */}
             </Box>
         </div>
     );

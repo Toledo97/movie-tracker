@@ -44,7 +44,7 @@ export default async function Dashboard({  currentPage, currentPage2, table }: {
     )
 
     return (
-        <main className='flex flex-col md:gap-16 gap-30'>
+        <main className='flex flex-col md:gap-16 gap-32'>
             <div>
                 <Navbar />
             </div>

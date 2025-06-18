@@ -17,27 +17,13 @@ export async function login(formState: FormState, formData: FormData): Promise<F
 
   const supabase = await createClient();
 
-  try {
-    const data = schema.parse({email: formData.get('email'), password: formData.get('password')});
-    console.log("Valid email:", data.email);
-    const { error } = await supabase.auth.signInWithPassword(data);
 
-    if (error) {
-      return { error: { message: error.message } };
-    }
+  const data = schema.parse({ email: formData.get('email'), password: formData.get('password') });
+  console.log("Valid email:", data.email);
+  const { error } = await supabase.auth.signInWithPassword(data);
 
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      // Handle validation errors
-      error.errors.forEach(err => console.error(err.message));
-      console.log(1)
-      return { error: { message: String(error.errors[0].message)} };
-    } else {
-      // Handle other errors
-      console.error("An unexpected error occurred:", error);
-      console.log(2)
-      return { error: { message: String(error)} };
-    }
+  if (error) {
+    return { error: { message: error.message } };
   }
 
   const userData = await supabase.auth.getUser()
