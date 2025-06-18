@@ -26,3 +26,13 @@ export interface ButtonProps extends React.PropsWithChildren {
     textColor?: string;
 }
 
+
+
+export type Errors = {
+    email?: string;
+    password?: string;
+    message?: string
+};
+export type FormState = {
+    error: Errors;
+};

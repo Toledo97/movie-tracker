@@ -22,8 +22,6 @@ export default async function Page(props: {
     const table = hasCookie ? tables[searchParams?.table || 0] : tables[0];
     const query = searchParams?.query || '';
 
-    
-
     return (
         <>
             <Dashboard currentPage={currentPage} currentPage2={currentPage2} table={table} />;

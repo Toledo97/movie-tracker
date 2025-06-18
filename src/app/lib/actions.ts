@@ -2,22 +2,42 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { MovieProps } from '@/app/lib/types'
+import { MovieProps, FormState, Errors } from '@/app/lib/types'
 import { createClient } from '@/app/utils/supabase/server'
 import { cookies } from 'next/headers';
+import { string, z } from 'zod';
 
-export async function login(formData: FormData) {
 
-  const supabase = await createClient()
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-  const { error } = await supabase.auth.signInWithPassword(data)
-  if (error) {
-    redirect('/error')
+const schema = z.object({
+  email: z.string().email({ message: "Invalid email format" }),
+  password: z.string(),
+});
+
+export async function login(formState: FormState, formData: FormData): Promise<FormState> {
+
+  const supabase = await createClient();
+
+  try {
+    const data = schema.parse({email: formData.get('email'), password: formData.get('password')});
+    console.log("Valid email:", data.email);
+    const { error } = await supabase.auth.signInWithPassword(data);
+
+    if (error) {
+      return { error: { message: error.message } };
+    }
+
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Handle validation errors
+      error.errors.forEach(err => console.error(err.message));
+      console.log(1)
+      return { error: { message: String(error.errors[0].message)} };
+    } else {
+      // Handle other errors
+      console.error("An unexpected error occurred:", error);
+      console.log(2)
+      return { error: { message: String(error)} };
+    }
   }
 
   const userData = await supabase.auth.getUser()
@@ -38,8 +58,7 @@ export async function logout() {
   const supabase = await createClient()
   const { error } = await supabase.auth.signOut()
 
-  const cookieStore = await cookies();
-  cookieStore.delete('user');
+  await deleteCookies()
 
   if (error) {
     redirect('/error')
@@ -95,26 +114,28 @@ export async function getMovieCount(table: string): Promise<number> {
 }
 
 
-export async function getWatchedMovies( start: number, end: number, count?: number): Promise<MovieProps[]> {
+export async function getWatchedMovies(start: number, end: number, count: number): Promise<MovieProps[]> {
   const supabase = await createClient()
   const table = 'watched_films'
 
   if (count === 0) {
-    
     return [] as MovieProps[]
   }
 
-
-  
-    const { data: movies, error } = await supabase
+  const { data: movies, error } = (count < 10) ?
+    await supabase
+      .from(table)
+      .select() :
+    await supabase
       .from(table)
       .select()
       .range(start, end)
-    if (error) {
-      console.error(error)
-    }
 
-    return movies || [] as MovieProps[]
+  if (error) {
+    console.error(error)
+  }
+  return movies || [] as MovieProps[]
+
 }
 
 export async function getWatchedMovieCount(): Promise<number> {
@@ -167,3 +188,4 @@ export async function removeWatched(movie_id: number) {
     console.error(error)
   }
 }
+

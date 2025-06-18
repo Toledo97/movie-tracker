@@ -18,6 +18,7 @@ const Navbar = async () => {
         if (!error && data.user) {
             userExists = true;
         }
+        // console.log('data ',data)
     }
 
     return (
@@ -57,7 +58,7 @@ function SearchComponent() {
     return (
         <form className="form-inline flex gap-2">
             <input className="form-control mr-sm-2 flex-1" type="search" placeholder="Search" aria-label="Search"></input>
-            <button id="" className={`Login-button text-white font-bold py-2 px-4 border-b-4 rounded`} type={"submit"}>
+            <button id="" className={`Default-button text-white font-bold py-2 px-4 border-b-4 rounded`} type={"submit"}>
                 Search
             </button>
         </form>)

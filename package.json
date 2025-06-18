@@ -32,7 +32,9 @@
         "react-html-props": "^2.1.1",
         "styled-components": "^6.1.18",
         "tailwind": "^2.2.0",
-        "tailwindcss": "^4.1.8"
+        "tailwindcss": "^4.1.8",
+        "zod": "^3.25.67",
+        "zod-form-data": "^3.0.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.27.0",

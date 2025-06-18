@@ -3,10 +3,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-// import { LoginComponent } from '../login/page';
 import Modal from '@mui/material/Modal';
 import { login, signup, logout } from '@/app/lib/actions'
+import LogoutIcon from '@mui/icons-material/Logout';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { FormState } from '@/app/lib/types'
 
+import { AuthError } from '@supabase/supabase-js';
 import '@/app/ui/button.css'
 
 const style = {
@@ -14,26 +17,36 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 666,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
 };
 
+const initialState: FormState = { error: {} };
+
 
 function LoginComponent() {
-  return (
-    <form className='flex'>
-      <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required />
+    const [state, formAction, isPending] = React.useActionState(login, initialState);
 
-      <button formAction={login}>Log in</button>
-      <button formAction={signup}>Sign up</button>
-    </form>
-  )
+    return (
+        <form className='flex flex-col gap-2' action={formAction}>
+            <div>
+                <label htmlFor="email">Email:</label>
+                <input className="form-control" id="email" name="email" type="email" required />
+
+            </div>
+            <div>
+                <label htmlFor="password">Password:</label>
+                <input className="form-control" id="password" name="password" type="password" required />
+            </div>
+
+            <button className='Login-button text-white font-bold py-2 px-4 border-b-4 rounded' >Log in</button>
+
+                {state?.error?.message && <div className='text-red-700'><ErrorOutlineIcon />  {state?.error?.message}</div>}
+
+        </form>
+    )
 }
 
 export default function LoginModal() {
@@ -61,15 +74,16 @@ export default function LoginModal() {
 
 export function LogoutButton() {
     return (
-        <button onClick={logout} id="" 
-            className={`Default-button text-white font-bold py-2 px-4 border-b-4 rounded`} 
-            type={"submit"}>Logout</button>
+        <button onClick={logout} id=""
+            className={`Default-button text-white font-bold py-2 px-4 border-b-4 rounded`}
+            type={"submit"}><LogoutIcon /></button>
     )
 }
 
 
 
 function BasicModal() {
+
     return (
         <div>
 

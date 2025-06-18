@@ -16,16 +16,12 @@ import StreamIcon from '@mui/icons-material/Stream';
 
 import SaveIcon from '@mui/icons-material/Save';
 
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { setWatched, removeWatched, editWatchedMethod } from '@/app/lib/actions'
 
 export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardData: MovieProps, imageBaseUrl: string }) {
 
-
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const params = new URLSearchParams(searchParams);
-    const { replace, refresh } = useRouter();
+    const { refresh } = useRouter();
 
     const handleClick = (movie_id: number, watched: boolean) => {
 
@@ -96,7 +92,6 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
             </div>
         </div>)
 }
-// star: save for later button? 
 
 function BlankMovieCard() {
     return (

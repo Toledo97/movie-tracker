@@ -39,7 +39,7 @@ export default async function Dashboard({  currentPage, currentPage2, table }: {
     const [allMovies, allWatchedMovies] = await Promise.all(
         [
             getMovies(startIdx, endIdx, table),
-            getWatchedMovies( startIdxWatched, endIdxWatched)
+            getWatchedMovies( startIdxWatched, endIdxWatched, totalWatchedMovies)
         ]
     )
 
