@@ -45,10 +45,8 @@ export default async function Dashboard({ currentPage, currentPage2, table }: { 
 
     return (
         <main className='flex flex-col '>
-            <div className='h-20'> 
-                <Navbar />
-            </div>
-            <div className="row-start-1flex flex-col gap-4 p-4 my-36">
+            <Navbar />
+            <div className="row-start-1 flex flex-col gap-4 p-4">
                 <div>
                     <div className='flex flex-col gap-2 text-white px-4'>
                         <Suspense fallback={<Loading />}>

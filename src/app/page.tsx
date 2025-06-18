@@ -1,5 +1,6 @@
 import Dashboard from '@/app/(dashboard)/Dashboard';
 import { cookies } from 'next/headers'
+import Navbar from "@/app/(dashboard)/NavBar";
 
 export default async function Page(props: {
     searchParams?: Promise<{

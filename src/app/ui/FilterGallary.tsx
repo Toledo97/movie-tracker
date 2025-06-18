@@ -12,13 +12,7 @@ export default function FilterCheck() {
     const createFilterURL = (table: number) => {
         const params = new URLSearchParams(searchParams);
         params.set('table', `${table}`);
-
         params.set('page', '1');
-
-        if (params.has('action')) {
-            params.delete('action')
-            params.delete('movie_id')
-        }
 
         replace(`${pathname}?${params.toString()}`)
     };

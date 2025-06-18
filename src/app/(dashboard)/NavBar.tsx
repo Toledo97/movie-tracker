@@ -21,22 +21,27 @@ const Navbar = async () => {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg 
+        <div className='md:h-20 h-24'>
+
+            <nav className="navbar navbar-expand-lg 
                             navbar-light bg-dark 
                             bg-opacity-75 text-light
-                            fixed-top">
-            <div className="flex flex-wrap w-full justify-center gap-3 md:gap-2 p-2">
+                            fixed-top ">
+                <div className="flex flex-wrap w-full justify-center gap-3 md:gap-2 p-2">
 
-                <LogoComponent />
-                <div className='flex flex-row gap-2'>
+                    <LogoComponent />
+                    <div className='flex flex-row gap-2'>
 
-                    <SearchComponent />
+                        <SearchComponent />
 
-                    {!userExists ? <LoginModal /> : <LogoutButton />}
+                        {!userExists ? <LoginModal /> : <LogoutButton />}
 
+                    </div>
                 </div>
-            </div>
-        </nav >
+
+            </nav >
+        </div>
+
     );
 };
 
