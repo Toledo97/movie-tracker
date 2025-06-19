@@ -13,12 +13,14 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
     const handleWheel = React.useCallback((event: WheelEvent) => {
         if (scrollContainerRef.current) {
             event.preventDefault(); // Prevent default vertical scrolling
-            scrollContainerRef.current.scrollLeft += event.deltaY; // Adjust horizontal scroll
+            (scrollContainerRef.current as HTMLElement).scrollLeft += event.deltaY; // Adjust horizontal scroll
         }
     }, []);
 
     React.useEffect(() => {
-        const element = (scrollContainerRef.current as unknown) as HTMLElement ;
+
+        const element = (scrollContainerRef.current) ? scrollContainerRef.current as HTMLElement : scrollContainerRef.current;
+        
         if (element) {
             element.addEventListener('wheel', handleWheel, { passive: false });
         }
