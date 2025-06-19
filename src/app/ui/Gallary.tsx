@@ -10,7 +10,7 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
     const scrollContainerRef = React.useRef(null);
 
-    const handleWheel = React.useCallback((event: any) => {
+    const handleWheel = React.useCallback((event: WheelEvent) => {
         if (scrollContainerRef.current) {
             event.preventDefault(); // Prevent default vertical scrolling
             scrollContainerRef.current.scrollLeft += event.deltaY; // Adjust horizontal scroll
@@ -22,6 +22,7 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
         if (element) {
             element.addEventListener('wheel', handleWheel, { passive: false });
         }
+
         return () => {
             if (element) {
                 element.removeEventListener('wheel', handleWheel);

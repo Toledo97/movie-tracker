@@ -80,10 +80,10 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
             options={MovieData}
             getOptionLabel={(option) => (option as MovieProps).title ? (option as MovieProps).title : '' }
 
-            onChange={(event: any) => {
-                handleSearch(event.target.value);
+            onChange={(value) => {
+                handleSearch(value);
             }}
-            onInputChange={(event: any, value) => {
+            onInputChange={(event, value) => {
                 handleSearch(value);
             }}
 
@@ -103,6 +103,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
 
             renderOption={(props, option: MovieProps) => {
                 const { key, ...optionProps } = props;
+                
                 return (
                     <Box
                         key={key}
