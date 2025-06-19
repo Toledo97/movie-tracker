@@ -19,14 +19,13 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');
 
-    // const [totalMovies, totalWatchedMovies] = await Promise.all(
-    //     [
-    //         getMovieCount(table),
-    //         getWatchedMovieCount()
-    //     ]
-    // )
+    const [totalMovies, totalWatchedMovies] = await Promise.all(
+        [
+            getMovieCount(table),
+            getWatchedMovieCount()
+        ]
+    )
 
-    const [totalMovies, totalWatchedMovies] = [0,0]
 
     const pageSize = 10;
     const totalPages = Math.ceil(totalMovies / pageSize);
@@ -38,14 +37,13 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
     const GallaryData1 = { title: 'All Movies', total: totalMovies }
     const GallaryData2 = { title: 'Watched Movies', total: totalWatchedMovies }
 
-    // const [allMovies, allWatchedMovies] = await Promise.all(
-    //     [
-    //         getMovies(startIdx, endIdx, table),
-    //         getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies),
-    //     ]
-    // )
+    const [allMovies, allWatchedMovies] = await Promise.all(
+        [
+            getMovies(startIdx, endIdx, table),
+            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies),
+        ]
+    )
 
-    const [allMovies, allWatchedMovies] = [[] , []]
 
 
     const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[]
