@@ -51,9 +51,6 @@ const style = {
 
 export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) {
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
-
-    const [val, setValue] = React.useState('')
-
     const searchParams = useSearchParams();
     const { replace } = useRouter();
     const pathname = usePathname();
@@ -72,10 +69,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
     }, 600)
 
 
-
-
     return (
-
         <Autocomplete
             freeSolo
             loading
