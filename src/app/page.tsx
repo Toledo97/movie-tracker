@@ -25,7 +25,7 @@ export default async function Page(props: {
 
     return (
         <>
-            <Dashboard currentPage={currentPage} currentPage2={currentPage2} table={table} />;
+            <Dashboard currentPage={currentPage} currentPage2={currentPage2} table={table} term={query}/>;
         </>
     )
 };

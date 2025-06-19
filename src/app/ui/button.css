@@ -1,23 +1,19 @@
 .Login-button {
     background-color: var(--color-green-900);
-    border-bottom: 5px solid var(--color-green-950);
     font-weight: bold;
+    height: 40px;
 }
-
 
 .Login-button:hover {
     background-color: var(--color-green-800);
-    border-bottom: 5px solid var(--color-green-900);
 }
 
 .Default-button {
     background-color: var(--color-red-900);
-    /* border: var(--color-red-950); */
-    border-bottom: 5px solid var(--color-red-950);
     font-weight: bold;
+    height: 40px;
 }
 
 .Default-button:hover {
     background-color: var(--color-red-800);
-    border-bottom: 5px solid var(--color-red-900);
 }

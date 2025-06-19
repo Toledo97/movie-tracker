@@ -11,10 +11,10 @@ import { Suspense } from 'react';
 import Loading from '@/app/loading'
 import { cookies } from 'next/headers'
 
-import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies } from '@/app/lib/actions'
+import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies, searchMovies } from '@/app/lib/actions'
 import { calculateDBIdx } from '@/app/utils/utils'
 
-export default async function Dashboard({ currentPage, currentPage2, table }: { currentPage: number, currentPage2: number, table: string }) {
+export default async function Dashboard({ currentPage, currentPage2, table, term }: { currentPage: number, currentPage2: number, table: string, term: string }) {
 
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');
@@ -39,13 +39,15 @@ export default async function Dashboard({ currentPage, currentPage2, table }: { 
     const [allMovies, allWatchedMovies] = await Promise.all(
         [
             getMovies(startIdx, endIdx, table),
-            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies)
+            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies),
         ]
     )
 
+    const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[]
+
     return (
         <main className='flex flex-col '>
-            <Navbar />
+            <Navbar MovieData={searchRes} ></Navbar>
             <div className="row-start-1 flex flex-col gap-4 p-4">
                 <div>
                     <div className='flex flex-col gap-2 text-white px-4'>

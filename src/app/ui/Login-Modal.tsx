@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FormState } from '@/app/lib/types'
 
-import { AuthError } from '@supabase/supabase-js';
+import LoginIcon from '@mui/icons-material/Login';
 import '@/app/ui/button.css'
 
 const style = {
@@ -58,7 +58,7 @@ export default function LoginModal() {
 
     return (
         <>
-            <button onClick={handleOpen} id="" className={`Login-button text-white font-bold py-2 px-4 border-b-4 rounded`} type={"submit"}>Login</button>
+            <button onClick={handleOpen} id="" className={`Login-button text-white font-bold py-2 px-4 rounded`} type={"submit"}><LoginIcon/></button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -69,13 +69,12 @@ export default function LoginModal() {
             </Modal>
         </>
     )
-
 }
 
 export function LogoutButton() {
     return (
         <button onClick={logout} id=""
-            className={`Default-button text-white font-bold py-2 px-4 border-b-4 rounded`}
+            className={`Default-button text-white font-bold px-4 h-10 rounded`}
             type={"submit"}><LogoutIcon /></button>
     )
 }

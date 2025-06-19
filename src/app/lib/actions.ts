@@ -72,6 +72,23 @@ export async function signup(formData: FormData) {
 }
 
 
+export async function searchMovies(title: string): Promise<MovieProps[]> {
+  const supabase = await createClient()
+
+  const cleanedTitle = title.replace('', '%') + '%'
+
+  const { data: movies, error } = await supabase
+    .from('all_films')
+    .select()
+    .ilike('title', cleanedTitle)
+  
+  if (error) {
+    console.error(error)
+  }
+
+  return movies || []
+}
+
 export async function getMovies(start: number, end: number, table: string): Promise<MovieProps[]> {
   const supabase = await createClient()
 
