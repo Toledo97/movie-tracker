@@ -1,0 +1,22 @@
+@media only screen and (min-width: 600px) {
+
+
+    .logo-title {
+        visibility: visible;
+    }
+
+
+}
+
+
+
+@media only screen and (max-width: 600px) {
+
+
+    .logo-title {
+        visibility: hidden;
+        width: 0;
+    }
+
+
+}
