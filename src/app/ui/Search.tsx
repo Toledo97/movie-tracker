@@ -55,6 +55,10 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
     const { replace } = useRouter();
     const pathname = usePathname();
 
+    const [value, setValue] = React.useState<MovieProps | null>(null);
+
+    
+
     const handleSearch = useDebouncedCallback((term) => {
 
         const params = new URLSearchParams(searchParams);
@@ -76,14 +80,13 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
             id="free-solo"
             sx={{ width: 200 }}
             size='small'
-            value={''}
+            value={value}
             options={MovieData}
-            getOptionLabel={(option) => (option as MovieProps).title ? (option as MovieProps).title : '' }
 
-            onChange={(value) => {
+            onChange={(e, value: MovieProps | null | string) => {
                 handleSearch(value);
             }}
-            onInputChange={(event, value) => {
+            onInputChange={( value) => {
                 handleSearch(value);
             }}
 
@@ -103,7 +106,6 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
 
             renderOption={(props, option: MovieProps) => {
                 const { key, ...optionProps } = props;
-                
                 return (
                     <Box
                         key={key}
@@ -111,14 +113,17 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
                         sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                         {...optionProps}
                     >
-                        <img
-                            loading="lazy"
-                            width="40"
-                            srcSet={`${imageBaseUrl}${option.poster_path}`}
-                            src={`${imageBaseUrl}${option.poster_path}`}
-                            alt=""
-                        />
-                        {option.title}
+                        <div onClick={() => console.log(option.title)}>
+
+                            <img
+                                loading="lazy"
+                                width="40"
+                                srcSet={`${imageBaseUrl}${option.poster_path}`}
+                                src={`${imageBaseUrl}${option.poster_path}`}
+                                alt=""
+                            />
+                            {option.title}
+                        </div>
                     </Box>
                 );
             }}

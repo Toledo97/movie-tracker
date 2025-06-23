@@ -1,23 +1,32 @@
 
 import './Dashboard.css';
 
-import { MovieProps } from '@/app/lib/types'
+import { MovieProps } from '@/app/lib/types';
 import * as React from 'react';
 import Gallary from '@/app/ui/Gallary';
 import Navbar from "@/app/(dashboard)/NavBar";
-import Pagination from '@/app/ui/Pagination'
-import FilterCheck from '@/app/ui/FilterGallary'
+import Pagination from '@/app/ui/Pagination';
+import { createClient } from '@/app/utils/supabase/server';
+import FilterCheck from '@/app/ui/FilterGallary';
 import { Suspense } from 'react';
-import Loading from '@/app/loading'
-import { cookies } from 'next/headers'
+import Loading from '@/app/loading';
+import { cookies } from 'next/headers';
 
-import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies, searchMovies } from '@/app/lib/actions'
-import { calculateDBIdx } from '@/app/utils/utils'
+import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies, searchMovies } from '@/app/lib/actions';
+import { calculateDBIdx } from '@/app/utils/utils';
 
 export default async function Dashboard({ currentPage, currentPage2, table, term }: { currentPage: number, currentPage2: number, table: string, term: string }) {
-
+    const supabase = await createClient();
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');
+    let userExists = hasCookie;
+
+    if (!userExists) {
+        const { data, error } = await supabase.auth.getUser()
+        if (!error && data.user) {
+            userExists = true;
+        }
+    }
 
     const [totalMovies, totalWatchedMovies] = await Promise.all(
         [
@@ -45,12 +54,11 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
     )
 
 
-
     const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[]
 
     return (
         <main className='flex flex-col '>
-            <Navbar MovieData={searchRes} ></Navbar>
+            <Navbar MovieData={searchRes} userExists={userExists}></Navbar>
             <div className="row-start-1 flex flex-col gap-4 p-4">
                 <div>
                     <div className='flex flex-col gap-2 text-white px-4'>
@@ -64,7 +72,7 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
                             </div>
                         </Suspense>
 
-                        {hasCookie &&
+                        {userExists &&
                             <FilterCheck />
                         }
 

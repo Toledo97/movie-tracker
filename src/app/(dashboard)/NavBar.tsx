@@ -9,19 +9,7 @@ import { MovieProps } from '@/app/lib/types'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'
 
-const Navbar = async ({ MovieData }: { MovieData: MovieProps[] }) => {
-    const supabase = await createClient();
-    const cookieStore = await cookies();
-    const hasCookie = cookieStore.has('user');
-
-    let userExists = hasCookie;
-
-    if (!userExists) {
-        const { data, error } = await supabase.auth.getUser()
-        if (!error && data.user) {
-            userExists = true;
-        }
-    }
+const Navbar = async ({ MovieData, userExists }: { MovieData: MovieProps[], userExists: boolean }) => {
 
     return (
         <div className='md:h-20 h-24'>
