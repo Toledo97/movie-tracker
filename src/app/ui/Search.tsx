@@ -106,6 +106,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
 
             renderOption={(props, option: MovieProps) => {
                 const { key, ...optionProps } = props;
+                
                 return (
                     <Box
                         key={key}
