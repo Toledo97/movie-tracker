@@ -72,9 +72,7 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
                             </div>
                         </Suspense>
 
-                        {userExists &&
-                            <FilterCheck />
-                        }
+                            <FilterCheck userExists={userExists} />
 
                         <Suspense fallback={<Loading />}>
 

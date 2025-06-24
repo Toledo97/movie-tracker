@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
-export default function FilterCheck() {
+export default function FilterCheck({ userExists }: { userExists: boolean }) {
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -30,6 +30,9 @@ export default function FilterCheck() {
 
     };
 
+    React.useEffect(() => {
+        createFilterURL((userExists) ? 0 : 1)
+    }, [ userExists ])
 
     return (
         <div className='flex flex-row gap-2 content-center'>
@@ -37,6 +40,7 @@ export default function FilterCheck() {
             <input
                 type="checkbox"
                 onChange={handleChange}
+                disabled={!userExists}
             />
 
             <div className='text-md'>

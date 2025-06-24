@@ -58,7 +58,7 @@ export default function LoginModal() {
 
     return (
         <>
-            <button onClick={handleOpen} id="" className={`Login-button text-white font-bold py-2 px-4 rounded`} type={"submit"}><LoginIcon/></button>
+            <button onClick={handleOpen} className={`Login-button text-white font-bold py-2 px-4 rounded`} type={"submit"}><LoginIcon/></button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -87,7 +87,7 @@ function BasicModal() {
         <div>
 
             <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography id="modal-modal-title" variant="h6" component="h2" className='min-w-56 '>
                     <div className='text-center'>
                         <b>Login</b><hr></hr>
                     </div>
@@ -98,3 +98,46 @@ function BasicModal() {
     );
 }
 
+
+
+function ProfileComponent() {
+    const [state, formAction, isPending] = React.useActionState(login, initialState);
+
+    return (
+        <form className='flex flex-col gap-2' action={formAction}>
+            <div>
+                <label htmlFor="email">Email:</label>
+                <input className="form-control" id="email" name="email" type="email" required />
+
+            </div>
+            <div>
+                <label htmlFor="password">Password:</label>
+                <input className="form-control" id="password" name="password" type="password" required />
+            </div>
+
+            <button className='Login-button text-white font-bold py-2 px-4 border-b-4 rounded' >Log in</button>
+
+                {state?.error?.message && <div className='text-red-700'><ErrorOutlineIcon />  {state?.error?.message}</div>}
+
+        </form>
+    )
+}
+
+
+
+function ProfileModal() {
+
+    return (
+        <div>
+
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" className='min-w-56 '>
+                    <div className='text-center'>
+                        <b>Profile</b><hr></hr>
+                    </div>
+                </Typography>
+                <LoginComponent />
+            </Box>
+        </div>
+    );
+}
