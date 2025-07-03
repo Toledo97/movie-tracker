@@ -9,9 +9,9 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
     const searchParams = useSearchParams();
     const { replace } = useRouter();
 
-    const createFilterURL = (table: number) => {
+    const createFilterURL = (filter: boolean) => {
         const params = new URLSearchParams(searchParams);
-        params.set('table', `${table}`);
+        params.set('f', `${filter}`);
         params.set('page', '1');
 
         replace(`${pathname}?${params.toString()}`)
@@ -19,20 +19,15 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-        switch (event.target.checked) {
-            case true:
-                createFilterURL(1);
-                break;
-            case false:
-                createFilterURL(0);
-                break;
-        }
+
+        createFilterURL(event.target.checked);
+
 
     };
 
     React.useEffect(() => {
-        createFilterURL((userExists) ? 0 : 1)
-    }, [ userExists ])
+        createFilterURL(false)
+    }, [userExists])
 
     return (
         <div className='flex flex-row gap-2 content-center'>

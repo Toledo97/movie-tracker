@@ -23,7 +23,7 @@ const Navbar = async ({ MovieData, userExists }: { MovieData: MovieProps[], user
                     <LogoComponent />
                     <div className='flex flex-row gap-2 items-end '>
 
-                        <MovieSelect MovieData={MovieData} />
+                        {/* <MovieSelect MovieData={MovieData} /> */}
 
                         {!userExists ? <LoginModal /> : <LogoutButton />}
 

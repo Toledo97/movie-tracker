@@ -3,7 +3,7 @@ import './Dashboard.css';
 
 import { MovieProps } from '@/app/lib/types';
 import * as React from 'react';
-import Gallary from '@/app/ui/Gallary';
+import Gallary, { GallaryV2 } from '@/app/ui/Gallary';
 import Navbar from "@/app/(dashboard)/NavBar";
 import Pagination from '@/app/ui/Pagination';
 import { createClient } from '@/app/utils/supabase/server';
@@ -15,7 +15,7 @@ import { cookies } from 'next/headers';
 import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies, searchMovies } from '@/app/lib/actions';
 import { calculateDBIdx } from '@/app/utils/utils';
 
-export default async function Dashboard({ currentPage, currentPage2, table, term }: { currentPage: number, currentPage2: number, table: string, term: string }) {
+export default async function Dashboard({ currentPage, currentPage2, term, filter }: { currentPage: number, currentPage2: number, term: string, filter: boolean }) {
     const supabase = await createClient();
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');
@@ -28,14 +28,15 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
         }
     }
 
-    const [totalMovies, totalWatchedMovies] = await Promise.all(
+    let [totalMovies, totalWatchedMovies] = await Promise.all(
         [
-            getMovieCount(table),
+            getMovieCount(),
             getWatchedMovieCount()
         ]
     )
 
-
+    totalMovies = filter ? totalMovies - totalWatchedMovies : totalMovies;
+    
     const pageSize = 10;
     const totalPages = Math.ceil(totalMovies / pageSize);
     const [startIdx, endIdx] = calculateDBIdx(currentPage, totalMovies, pageSize)
@@ -48,11 +49,10 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
 
     const [allMovies, allWatchedMovies] = await Promise.all(
         [
-            getMovies(startIdx, endIdx, table),
+            getMovies(startIdx, endIdx, filter),
             getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies),
         ]
     )
-
 
     const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[]
 
@@ -95,7 +95,7 @@ export default async function Dashboard({ currentPage, currentPage2, table, term
                                 <div>{GallaryData2.total || 0} Films</div>
 
                             </div>
-                            {<Gallary key={'watched'} MovieData={allWatchedMovies as MovieProps[]} GallaryData={{ title: 'Watched Movies', total: totalWatchedMovies }} />}
+                            {<GallaryV2 key={'watched'} MovieData={allWatchedMovies} GallaryData={{ title: 'Watched Movies', total: totalWatchedMovies }} />}
                         </div>
                     </Suspense>
 

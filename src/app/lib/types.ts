@@ -11,8 +11,18 @@ export interface MovieProps {
     movie_id: number;
     watched?: boolean;
     favorited?: boolean;
-    methods?: boolean;
+    method?: boolean;
 }
+
+export interface MoviePropsV2 {
+    movie_id: number;
+    favorited?: boolean;
+    method?: boolean;
+
+    movies?: Movies
+}
+
+
 
 export interface GallaryProps {
     title: string;
@@ -33,4 +43,12 @@ export type Errors = {
 };
 export type FormState = {
     error: Errors;
+};
+
+export type Movies = {
+    title: string;
+    release_date: string;
+    poster_path?: string;
+    backdrop_path?: string;
+    overview: string;
 };

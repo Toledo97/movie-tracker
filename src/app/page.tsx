@@ -1,11 +1,12 @@
 import Dashboard from '@/app/(dashboard)/Dashboard';
 import { cookies } from 'next/headers'
 import Navbar from "@/app/(dashboard)/NavBar";
+import { boolean } from 'zod';
 
 export default async function Page(props: {
     searchParams?: Promise<{
         query?: string;
-        table?: number;
+        f?: string;
         movie_id?: number;
         page?: number;
         page2?: number;
@@ -13,19 +14,14 @@ export default async function Page(props: {
 }
 ) {
     const searchParams = await props.searchParams;
-    const currentPage = Number(searchParams?.page || 1);
-    const currentPage2 = Number(searchParams?.page2 || 1);
-
-    const cookieStore = await cookies();
-    const hasCookie = cookieStore.has('user');
-
-    const tables = ['all_films', 'all_films_filtered_watched'];
-    const table = hasCookie ? tables[searchParams?.table || 0] : tables[0];
+    const filter = searchParams?.f == 'true' ? true : false;
+    const allMoviesPage = Number(searchParams?.page || 1);
+    const WatchedMoviesPage = Number(searchParams?.page2 || 1);
     const query = searchParams?.query || '';
 
     return (
         <>
-            <Dashboard currentPage={currentPage} currentPage2={currentPage2} table={table} term={query}/>;
+            <Dashboard currentPage={allMoviesPage} currentPage2={WatchedMoviesPage} term={query} filter={filter}/>;
         </>
     )
 };

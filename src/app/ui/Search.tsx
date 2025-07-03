@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import { MovieProps } from '@/app/lib/types'
-import { ClassNames } from '@emotion/react';
 
 const style = {
     // Root class for the input field
@@ -55,9 +54,8 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
     const { replace } = useRouter();
     const pathname = usePathname();
 
-    const [value, setValue] = React.useState<MovieProps | null>(null);
+    const [myValue, setValue] = React.useState<MovieProps | null>(null);
 
-    
 
     const handleSearch = useDebouncedCallback((term) => {
 
@@ -80,15 +78,28 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
             id="free-solo"
             sx={{ width: 200 }}
             size='small'
-            value={value}
+            value={myValue}
             options={MovieData}
 
-            onChange={(e, value: MovieProps | null | string) => {
-                handleSearch(value);
-            }}
-            onInputChange={( value) => {
-                handleSearch(value);
-            }}
+            // onChange={(e, value: MovieProps | null | string) => {
+            //     const val = e.target as HTMLTextAreaElement
+            //     if(typeof value == 'object'){
+            //         setValue(value)
+            //         return;
+            //     }
+            //     handleSearch(val?.value)
+            //     // }
+            //     // handleSearch(value);
+            // }}
+            // onInputChange={(e, value) => {
+            //     if (typeof value == 'object') {
+            //         setValue(value)
+            //         handleSearch(myValue?.title);
+            //         return;
+            //     }
+            //     const val = e.target as HTMLTextAreaElement
+            //     handleSearch(val?.title);
+            // }}
 
             renderInput={(params) => (
                 <TextField
@@ -106,7 +117,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
 
             renderOption={(props, option: MovieProps) => {
                 const { key, ...optionProps } = props;
-                
+
                 return (
                     <Box
                         key={key}

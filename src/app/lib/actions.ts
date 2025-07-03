@@ -2,10 +2,11 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { MovieProps, FormState, Errors } from '@/app/lib/types'
-import { createClient } from '@/app/utils/supabase/server'
+import { MovieProps, FormState, MoviePropsV2, Movies } from '@/app/lib/types'
 import { cookies } from 'next/headers';
 import { string, z } from 'zod';
+import { createClient } from '@/app/utils/supabase/server'
+// import supabase from '@/app/utils/supabase/client'
 
 
 const schema = z.object({
@@ -17,9 +18,8 @@ export async function login(formState: FormState, formData: FormData): Promise<F
 
   const supabase = await createClient();
 
-
   const data = schema.parse({ email: formData.get('email'), password: formData.get('password') });
-  console.log("Valid email:", data.email);
+
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
@@ -29,8 +29,9 @@ export async function login(formState: FormState, formData: FormData): Promise<F
 
   const userData = await supabase.auth.getUser()
   await saveCookies(!!userData.data.user || false)
-  revalidatePath('/?table=0&page=1', 'layout')
-  redirect('/?table=0&page=1')
+
+  revalidatePath('/?f=false&page=1', 'layout')
+  redirect('/?f=false&page=1')
 }
 
 export async function saveCookies(userExists: boolean) {
@@ -50,8 +51,8 @@ export async function logout() {
   if (error) {
     redirect('/error')
   }
-  revalidatePath('/?table=0&page=1', 'layout')
-  redirect('/?table=0&page=1')
+  revalidatePath('/?f=false&page=1', 'layout')
+  redirect('/?f=false&page=1')
 }
 
 
@@ -81,21 +82,6 @@ export async function searchMovies(title: string): Promise<MovieProps[]> {
     .from('all_films')
     .select()
     .ilike('title', cleanedTitle)
-  
-  if (error) {
-    console.error(error)
-  }
-
-  return movies || []
-}
-
-export async function getMovies(start: number, end: number, table: string): Promise<MovieProps[]> {
-  const supabase = await createClient()
-
-  const { data: movies, error } = await supabase
-    .from(table)
-    .select()
-    .range(start, end)
 
   if (error) {
     console.error(error)
@@ -104,8 +90,21 @@ export async function getMovies(start: number, end: number, table: string): Prom
   return movies || []
 }
 
-export async function getMovieCount(table: string): Promise<number> {
+export async function getMovies(start: number, end: number, filter: boolean): Promise<MovieProps[]> {
   const supabase = await createClient()
+  const rpc_ = filter ? 'xor_all_watched' : 'all_films_default'
+  const {data: movies, error} = await supabase.rpc(rpc_).range(start,end);
+
+  if (error) {
+    console.error(error)
+  }
+
+  return movies || []
+}
+
+export async function getMovieCount(): Promise<number> {
+  const supabase = await createClient();
+  const table = 'movies';
 
   const { count, error } = await supabase
     .from(table)
@@ -118,36 +117,54 @@ export async function getMovieCount(table: string): Promise<number> {
 }
 
 
-export async function getWatchedMovies(start: number, end: number, count: number): Promise<MovieProps[]> {
+export async function getWatchedMovies(start: number, end: number, count: number): Promise<MoviePropsV2[]> {
   const supabase = await createClient()
-  const table = 'watched_films'
+  const table = 'watched'
 
+  const select = `
+        movie_id,
+        favorited,
+        method,
+        movies (title, release_date, poster_path, backdrop_path, overview)
+        `
   if (count === 0) {
-    
-    return [] as MovieProps[]
+
+    return [] as MoviePropsV2[]
   }
 
   const { data: movies, error } = (count < 10) ?
     await supabase
       .from(table)
-      .select() :
+      .select(select) :
     await supabase
       .from(table)
-      .select()
+      .select(select)
       .range(start, end)
 
   if (error) {
     console.error(error)
   }
 
-  return movies || [] as MovieProps[]
+  if (movies) {
+    return movies.map((item) => {
+      return {
+        movie_id:  item.movie_id,
+        favorited: item.favorited,
+        method : item.method,
+        movies: (item.movies as unknown) as Movies
+      }
+    })
+  }
+
+
+  return [] as MoviePropsV2[]
 }
 
 export async function getWatchedMovieCount(): Promise<number> {
   const supabase = await createClient()
 
   const { count, error } = await supabase
-    .from('watched_films')
+    .from('watched')
     .select('*', { count: 'exact', head: true })
   if (error) {
     console.error(error)
@@ -156,41 +173,21 @@ export async function getWatchedMovieCount(): Promise<number> {
   return count || 0
 }
 
-export async function setWatched(movie_id: number) {
+
+export async function sqlFunction(movie_id: number, func: number){
+
   const supabase = await createClient()
 
-  const { error } = await supabase.rpc('insert_watched', {
-    movie_id: movie_id,
-  });
-
-
-  if (error) {
-    console.error(error)
-  }
-}
-
-export async function editWatchedMethod(movie_id: number) {
-  const supabase = await createClient()
-
-  const { error } = await supabase.rpc('invert_method', {
+  const funcs = ['invert_method', 'insert_watched', 'delete_watched' ]
+  
+  const { error } = await supabase.rpc(funcs[func], {
     _movie_id: movie_id,
   });
-
-
+  
+  
   if (error) {
     console.error(error)
   }
 }
 
-
-export async function removeWatched(movie_id: number) {
-  const supabase = await createClient()
-  const { error } = await supabase.rpc('delete_watched', {
-    _movie_id: movie_id,
-  });
-
-  if (error) {
-    console.error(error)
-  }
-}
 
