@@ -178,7 +178,7 @@ export async function sqlFunction(movie_id: number, func: number){
 
   const supabase = await createClient()
 
-  const funcs = ['invert_method', 'insert_watched', 'delete_watched' ]
+  const funcs = ['invert_method', 'invert_favorite', 'insert_watched', 'delete_watched' ]
   
   const { error } = await supabase.rpc(funcs[func], {
     _movie_id: movie_id,

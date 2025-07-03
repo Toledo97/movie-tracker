@@ -25,10 +25,10 @@ export function MovieCardV2({ MovieCardData, imageBaseUrl }: { MovieCardData: Mo
 
         switch (watched) {
             case true:
-                sqlFunction(movie_id,2);
+                sqlFunction(movie_id,3);
                 break;
             case false:
-                sqlFunction(movie_id,1);
+                sqlFunction(movie_id,2);
                 break;
         }
         refresh()
@@ -101,10 +101,10 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
 
         switch (watched) {
             case true:
-                sqlFunction(movie_id,2);
+                sqlFunction(movie_id,3);
                 break;
             case false:
-                sqlFunction(movie_id,1);
+                sqlFunction(movie_id,2);
                 break;
         }
         refresh()
