@@ -40,6 +40,12 @@ export function MovieCardV2({ MovieCardData, imageBaseUrl }: { MovieCardData: Mo
         refresh()
     };
 
+    const toggle2 = (movie_id: number) => {
+
+        sqlFunction(movie_id,1)
+        refresh()
+    };
+
     const MovieData = MovieCardData.movies
 
     return (
@@ -80,7 +86,7 @@ export function MovieCardV2({ MovieCardData, imageBaseUrl }: { MovieCardData: Mo
                     <div className='flex flex-row justify-end z-10 w-full gap-4 py-2'>
 
 
-                        <button onClick={() => { }}>
+                        <button onClick={() => toggle2(MovieCardData.movie_id)}>
                             {!MovieCardData.favorited ? <FavoriteBorderIcon /> : <FavoriteIcon />}
                         </button>
                         <button onClick={() => handleClick(MovieCardData.movie_id, MovieData !== null || false)}>
@@ -113,6 +119,12 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
     const toggle = (movie_id: number) => {
 
         sqlFunction(movie_id,0)
+        refresh()
+    };
+
+    const toggle2 = (movie_id: number) => {
+
+        sqlFunction(movie_id,1)
         refresh()
     };
 
@@ -154,7 +166,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
                     <div className='flex flex-row justify-end z-10 w-full gap-4 py-2'>
 
 
-                        <button onClick={() => { }}>
+                        <button onClick={() => toggle2(MovieCardData.movie_id)}>
                             {!MovieCardData.favorited ? <FavoriteBorderIcon /> : <FavoriteIcon />}
                         </button>
                         <button onClick={() => handleClick(MovieCardData.movie_id, MovieCardData.watched || false)}>

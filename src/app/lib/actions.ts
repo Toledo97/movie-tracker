@@ -135,11 +135,11 @@ export async function getWatchedMovies(start: number, end: number, count: number
   const { data: movies, error } = (count < 10) ?
     await supabase
       .from(table)
-      .select(select) :
+      .select(select).order('watched_at').order('movie_id') :
     await supabase
       .from(table)
       .select(select)
-      .range(start, end)
+      .range(start, end).order('watched_at').order('movie_id')
 
   if (error) {
     console.error(error)
