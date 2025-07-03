@@ -35,7 +35,7 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
         ]
     )
 
-    let totalMoviesFiltered = filter ? totalMovies - totalWatchedMovies : totalMovies;
+    const totalMoviesFiltered = filter ? totalMovies - totalWatchedMovies : totalMovies;
     
     const pageSize = 10;
     const totalPages = Math.ceil(totalMoviesFiltered / pageSize);
