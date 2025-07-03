@@ -28,23 +28,23 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
         }
     }
 
-    let [totalMovies, totalWatchedMovies] = await Promise.all(
+    const [totalMovies, totalWatchedMovies] = await Promise.all(
         [
             getMovieCount(),
             getWatchedMovieCount()
         ]
     )
 
-    totalMovies = filter ? totalMovies - totalWatchedMovies : totalMovies;
+    let totalMoviesFiltered = filter ? totalMovies - totalWatchedMovies : totalMovies;
     
     const pageSize = 10;
-    const totalPages = Math.ceil(totalMovies / pageSize);
-    const [startIdx, endIdx] = calculateDBIdx(currentPage, totalMovies, pageSize)
+    const totalPages = Math.ceil(totalMoviesFiltered / pageSize);
+    const [startIdx, endIdx] = calculateDBIdx(currentPage, totalMoviesFiltered, pageSize)
 
     const totalWatchedPages = Math.ceil(totalWatchedMovies / pageSize);
     const [startIdxWatched, endIdxWatched] = calculateDBIdx(currentPage2, totalWatchedMovies, pageSize)
 
-    const GallaryData1 = { title: 'All Movies', total: totalMovies }
+    const GallaryData1 = { title: 'All Movies', total: totalMoviesFiltered }
     const GallaryData2 = { title: 'Watched Movies', total: totalWatchedMovies }
 
     const [allMovies, allWatchedMovies] = await Promise.all(
@@ -76,7 +76,7 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
 
                         <Suspense fallback={<Loading />}>
 
-                            {<Gallary key={'all'} MovieData={allMovies as MovieProps[]} GallaryData={{ title: 'All Movies', total: totalMovies }} />}
+                            {<Gallary key={'all'} MovieData={allMovies as MovieProps[]} GallaryData={{ title: 'All Movies', total: totalMoviesFiltered }} />}
 
                         </Suspense>
                     </div>
