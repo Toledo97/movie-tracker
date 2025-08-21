@@ -2,12 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { MovieProps, FormState, MoviePropsV2, Movies } from '@/app/lib/types'
+import { MovieProps, FormState } from '@/app/lib/types'
 import { cookies } from 'next/headers';
 import { string, z } from 'zod';
 import { createClient } from '@/app/utils/supabase/server'
-// import supabase from '@/app/utils/supabase/client'
-
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email format" }),
@@ -74,17 +72,16 @@ export async function signup(formData: FormData) {
 
 
 export async function searchMovies(title: string): Promise<MovieProps[]> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const cleanedTitle = title.replace('', '%') + '%'
+  const cleanedTitle = `%${title.replace('', '%')}%`;
 
   const { data: movies, error } = await supabase
-    .from('all_films')
-    .select()
-    .ilike('title', cleanedTitle)
+    .rpc('all_films_default')
+    .ilike('title', cleanedTitle);
 
   if (error) {
-    console.error(error)
+    console.error(error);
   }
 
   return movies || []
@@ -93,7 +90,7 @@ export async function searchMovies(title: string): Promise<MovieProps[]> {
 export async function getMovies(start: number, end: number, filter: boolean): Promise<MovieProps[]> {
   const supabase = await createClient()
   const rpc_ = filter ? 'xor_all_watched' : 'all_films_default'
-  const {data: movies, error} = await supabase.rpc(rpc_).range(start,end);
+  const {data: movies, error} = await supabase.rpc(rpc_).range(start, end);
 
   if (error) {
     console.error(error)
@@ -117,47 +114,21 @@ export async function getMovieCount(): Promise<number> {
 }
 
 
-export async function getWatchedMovies(start: number, end: number, count: number): Promise<MoviePropsV2[]> {
-  const supabase = await createClient()
-  const table = 'watched'
-
-  const select = `
-        movie_id,
-        favorited,
-        method,
-        movies (title, release_date, poster_path, backdrop_path, overview)
-        `
-  if (count === 0) {
-
-    return [] as MoviePropsV2[]
-  }
+export async function getWatchedMovies(start: number, end: number, count: number, orderBy: number): Promise<MovieProps[]> {
+  const supabase = await createClient();
+  const rpc_ = 'watched_films';
+  const orderOpt = ['watched_at', 'title'];
 
   const { data: movies, error } = (count < 10) ?
-    await supabase
-      .from(table)
-      .select(select).order('watched_at').order('movie_id') :
-    await supabase
-      .from(table)
-      .select(select)
-      .range(start, end).order('watched_at').order('movie_id')
+    await supabase.rpc(rpc_).order(orderOpt[orderBy], {ascending: false}) :
+    await supabase.rpc(rpc_).range(start, end).order(orderOpt[orderBy], {ascending: false});
 
   if (error) {
-    console.error(error)
+    console.error(error);
   }
 
-  if (movies) {
-    return movies.map((item) => {
-      return {
-        movie_id:  item.movie_id,
-        favorited: item.favorited,
-        method : item.method,
-        movies: (item.movies as unknown) as Movies
-      }
-    })
-  }
+  return movies || []
 
-
-  return [] as MoviePropsV2[]
 }
 
 export async function getWatchedMovieCount(): Promise<number> {
@@ -174,7 +145,7 @@ export async function getWatchedMovieCount(): Promise<number> {
 }
 
 
-export async function sqlFunction(movie_id: number, func: number){
+export async function sqlActionFunc(movie_id: number, func: number){
 
   const supabase = await createClient()
 

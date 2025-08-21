@@ -18,7 +18,7 @@ const Layout = ({ children }: Readonly<{ children: ReactNode }>) => {
     return (
         <html suppressHydrationWarning lang='en'>
             <AppRouterCacheProvider>
-                <body className={`bg-black flex flex-col h-screen`}>
+                <body className={`flex flex-col h-screen bg-slate-700`}>
                     <ThemeProvider>{children}</ThemeProvider>
                 </body>
             </AppRouterCacheProvider>

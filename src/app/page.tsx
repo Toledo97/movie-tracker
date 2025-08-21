@@ -20,8 +20,6 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
 
     return (
-        <>
-            <Dashboard currentPage={allMoviesPage} currentPage2={WatchedMoviesPage} term={query} filter={filter}/>;
-        </>
+        <Dashboard currentPage={allMoviesPage} currentPage2={WatchedMoviesPage} term={query} filter={filter} />
     )
 };

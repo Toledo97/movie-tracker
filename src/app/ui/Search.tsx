@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { MovieProps } from '@/app/lib/types'
+import { MovieType } from '@/app/lib/types'
 
 const style = {
     // Root class for the input field
@@ -48,13 +48,13 @@ const style = {
 }
 
 
-export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) {
+export default function MovieSelect({ MovieData }: { MovieData: MovieType[] }) {
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
     const searchParams = useSearchParams();
     const { replace } = useRouter();
     const pathname = usePathname();
 
-    const [myValue, setValue] = React.useState<MovieProps | null>(null);
+    const [myValue, setValue] = React.useState<MovieType | null>(null);
 
 
     const handleSearch = useDebouncedCallback((term) => {
@@ -80,26 +80,16 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
             size='small'
             value={myValue}
             options={MovieData}
+            getOptionLabel={(option) => {
+                return (typeof option !== 'string') ? option?.title : ''
+            }}
 
-            // onChange={(e, value: MovieProps | null | string) => {
-            //     const val = e.target as HTMLTextAreaElement
-            //     if(typeof value == 'object'){
-            //         setValue(value)
-            //         return;
-            //     }
-            //     handleSearch(val?.value)
-            //     // }
-            //     // handleSearch(value);
-            // }}
-            // onInputChange={(e, value) => {
-            //     if (typeof value == 'object') {
-            //         setValue(value)
-            //         handleSearch(myValue?.title);
-            //         return;
-            //     }
-            //     const val = e.target as HTMLTextAreaElement
-            //     handleSearch(val?.title);
-            // }}
+            onChange={(e, value: MovieType | null | string) => {
+                handleSearch(value);
+            }}
+            onInputChange={(e, value) => {
+                handleSearch(value);
+            }}
 
             renderInput={(params) => (
                 <TextField
@@ -115,7 +105,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
                 />
             )}
 
-            renderOption={(props, option: MovieProps) => {
+            renderOption={(props, option: MovieType) => {
                 const { key, ...optionProps } = props;
 
                 return (
@@ -126,15 +116,25 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieProps[] }) 
                         {...optionProps}
                     >
                         <div onClick={() => console.log(option.title)}>
+                            <div className='flex flex-row items-center gap-2'>
 
-                            <img
-                                loading="lazy"
-                                width="40"
-                                srcSet={`${imageBaseUrl}${option.poster_path}`}
-                                src={`${imageBaseUrl}${option.poster_path}`}
-                                alt=""
-                            />
-                            {option.title}
+                                <img
+                                    loading="lazy"
+                                    width="40"
+                                    srcSet={`${imageBaseUrl}${option.poster_path}`}
+                                    src={`${imageBaseUrl}${option.poster_path}`}
+                                    alt=""
+                                />
+
+                                <div className='flex flex-col gap-2 '>
+                                    <div className='font-bold'>
+                                        {option.title}
+                                    </div>
+                                    <div>
+                                        {option.release_date}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </Box>
                 );

@@ -18,11 +18,7 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-
         createFilterURL(event.target.checked);
-
-
     };
 
     React.useEffect(() => {

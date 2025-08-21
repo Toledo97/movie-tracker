@@ -3,7 +3,7 @@ import './Dashboard.css';
 
 import { MovieProps } from '@/app/lib/types';
 import * as React from 'react';
-import Gallary, { GallaryV2 } from '@/app/ui/Gallary';
+import Gallary from '@/app/ui/Gallary';
 import Navbar from "@/app/(dashboard)/NavBar";
 import Pagination from '@/app/ui/Pagination';
 import { createClient } from '@/app/utils/supabase/server';
@@ -36,7 +36,7 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
     )
 
     const totalMoviesFiltered = filter ? totalMovies - totalWatchedMovies : totalMovies;
-    
+
     const pageSize = 10;
     const totalPages = Math.ceil(totalMoviesFiltered / pageSize);
     const [startIdx, endIdx] = calculateDBIdx(currentPage, totalMoviesFiltered, pageSize)
@@ -44,66 +44,89 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
     const totalWatchedPages = Math.ceil(totalWatchedMovies / pageSize);
     const [startIdxWatched, endIdxWatched] = calculateDBIdx(currentPage2, totalWatchedMovies, pageSize)
 
-    const GallaryData1 = { title: 'All Movies', total: totalMoviesFiltered }
-    const GallaryData2 = { title: 'Watched Movies', total: totalWatchedMovies }
+    const GallaryTabAll = { title: 'All Movies', total: totalMoviesFiltered }
+    const GallaryTabWatched = { title: 'Watched Movies', total: totalWatchedMovies }
 
     const [allMovies, allWatchedMovies] = await Promise.all(
         [
             getMovies(startIdx, endIdx, filter),
-            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies),
+            getWatchedMovies(startIdxWatched, endIdxWatched, totalWatchedMovies, 1),
         ]
     )
 
-    const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[]
+    const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[];
+
+
+
 
     return (
-        <main className='flex flex-col '>
+        <main className='flex flex-col bg-slate-700'>
             <Navbar MovieData={searchRes} userExists={userExists}></Navbar>
-            <div className="row-start-1 flex flex-col gap-4 p-4">
-                <div>
-                    <div className='flex flex-col gap-2 text-white px-4'>
-                        <Suspense fallback={<Loading />}>
+            <div className="flex flex-col gap-4 p-4 pt-2">
 
-                            <div className='flex flex-row gap-4 items-end'>
-                                {GallaryData1.title ? <div className='text-3xl'>{GallaryData1.title}</div> : <></>}
+                <div className='flex flex-col gap-2 text-white'>
 
-                                <div>{GallaryData1.total || 0} Films</div>
+                    <TitleCard
+                        title={GallaryTabAll.title}
+                        total={GallaryTabAll.total}
+                    />
 
-                            </div>
-                        </Suspense>
+                    <FilterCheck userExists={userExists} />
 
-                            <FilterCheck userExists={userExists} />
-
-                        <Suspense fallback={<Loading />}>
-
-                            {<Gallary key={'all'} MovieData={allMovies as MovieProps[]} GallaryData={{ title: 'All Movies', total: totalMoviesFiltered }} />}
-
-                        </Suspense>
-                    </div>
-                    <div className="mt-5 flex w-full justify-center">
-                        {<Pagination totalPages={totalPages} pageType={'page'} />}
-                    </div>
+                    <DisplayCard
+                        title={GallaryTabAll.title}
+                        userExists={userExists}
+                        allMovies={allMovies}
+                        totalMovies={totalMoviesFiltered}
+                        totalPages={totalPages}
+                        pageType={'page'}
+                    />
                 </div>
 
-                <div>
-                    <Suspense fallback={<Loading />}>
-                        <div className='flex flex-col gap-2 text-white px-4'>
 
-                            <div className='flex flex-row gap-4 items-end'>
-                                {GallaryData2.title ? <div className='text-3xl'>{GallaryData2.title}</div> : <></>}
+                <div className='flex flex-col gap-2 text-white'>
 
-                                <div>{GallaryData2.total || 0} Films</div>
+                    <TitleCard
+                        title={GallaryTabWatched.title}
+                        total={GallaryTabWatched.total}
+                    />
 
-                            </div>
-                            {<GallaryV2 key={'watched'} MovieData={allWatchedMovies} GallaryData={{ title: 'Watched Movies', total: totalWatchedMovies }} />}
-                        </div>
-                    </Suspense>
+                    <DisplayCard
+                        title={GallaryTabWatched.title}
+                        userExists={userExists}
+                        allMovies={allWatchedMovies}
+                        totalMovies={totalWatchedMovies}
+                        totalPages={totalWatchedPages}
+                        pageType={'page2'}
+                    />
 
-                    <div className="mt-5 flex w-full justify-center">
-                        {<Pagination totalPages={totalWatchedPages} pageType={'page2'} />}
-                    </div>
+
                 </div>
             </div>
         </main>
+    )
+}
+
+function TitleCard({ title, total }: { title: string, total: number }) {
+    return (
+        <div className='flex flex-row gap-4 items-end'>
+            <div className='text-3xl'>{title}</div>
+            <div>{total || 0} Films</div>
+        </div>
+    )
+}
+
+async function DisplayCard({ title, allMovies, userExists, totalMovies, totalPages, pageType }: { title: string, totalMovies: number, userExists: boolean, totalPages: number, pageType: string, allMovies: MovieProps[] }) {
+    return (
+        <>
+            <Suspense fallback={<Loading />}>
+                <div className='flex flex-col gap-2'>
+                    {<Gallary key={'all'} MovieData={allMovies} GallaryData={{ title: title, total: totalMovies }} />}
+                </div>
+            </Suspense>
+            <div className="flex w-full justify-center">
+                {<Pagination totalPages={totalPages} pageType={pageType} />}
+            </div>
+        </>
     )
 }
