@@ -95,6 +95,7 @@ function BasicModal({ MovieData, imgUrl }: { MovieData: MovieProps, imgUrl: stri
                     <Rating
                         name="simple-controlled"
                         value={MovieData.rating}
+                        disabled={!MovieData.watched}
                         onChange={(event, newValue) => {
                             toggle(MovieData.movie_id, "Rating", newValue as number,);
                         }}
