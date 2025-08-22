@@ -69,21 +69,21 @@ function BasicModal({ MovieData, imgUrl }: { MovieData: MovieProps, imgUrl: stri
 
     return (
         // <div >
-        <Box sx={style} className='flex flex-col bg-slate-500 rounded-xl text-white h-7/10 overflow-y-auto example my-4'>
+        <Box sx={style} className='flex flex-col bg-slate-500 rounded-xl text-white h-7/10  my-4'>
             <Typography id="modal-modal-title" variant="h6" component="h2" className=''>
                 <div className='text-center'>
                     <b>{MovieData.title}</b><hr></hr>
                 </div>
             </Typography>
-            <form className='flex md:flex-row flex-col gap-4 '>
+            <form className='flex md:flex-row flex-col gap-4 overflow-y-auto example'>
 
                 {MovieData.poster_path !== 'None' &&
-                    <div className='flex relative z-0 w-56'>
+                    <div className='flex relative z-0 w-48 h-80'>
                         <img
                             src={`${imgUrl}${MovieData.poster_path}`}
                             alt={MovieData.title}
                             width={250}
-                            height={50}
+                            height={75}
                         />
                         <div className='absolute flex z-10 top-0 right-0 p-2 text-white' onClick={() => toggle(MovieData.movie_id, "Favorite")}>
                             {!MovieData.favorited ? <FavoriteBorderIcon className='hover:text-red-400' /> : <FavoriteIcon className='hover:text-red-400' />}
