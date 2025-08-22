@@ -57,8 +57,6 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
     const searchRes = (term) ? await searchMovies(term) : [] as MovieProps[];
 
 
-
-
     return (
         <main className='flex flex-col bg-slate-700'>
             <Navbar MovieData={searchRes} userExists={userExists}></Navbar>
@@ -99,8 +97,6 @@ export default async function Dashboard({ currentPage, currentPage2, term, filte
                         totalPages={totalWatchedPages}
                         pageType={'page2'}
                     />
-
-
                 </div>
             </div>
         </main>

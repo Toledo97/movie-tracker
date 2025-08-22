@@ -2,6 +2,14 @@
 
 import React from 'react';
 
+export interface DictionaryNum {
+  [key: string]: number; // Keys are strings, values are strings
+}
+
+export interface Dictionary {
+  [key: string]: string; // Keys are strings, values are strings
+}
+
 export interface MovieProps {
     title: string;
     release_date: string;
@@ -12,8 +20,8 @@ export interface MovieProps {
     watched?: boolean;
     favorited?: boolean;
     method?: boolean;
-    rating: number;
     watched_at?: string;
+    rating: number;
 }
 
 export interface GallaryProps {

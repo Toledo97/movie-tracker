@@ -145,14 +145,15 @@ export async function getWatchedMovieCount(): Promise<number> {
 }
 
 
-export async function sqlActionFunc(movie_id: number, func: number){
+export async function sqlActionFunc(movie_id: number, func: number, rating?: number){
 
   const supabase = await createClient()
 
-  const funcs = ['invert_method', 'invert_favorite', 'insert_watched', 'delete_watched' ]
+  const funcs = ['invert_method', 'invert_favorite', 'insert_watched', 'delete_watched', 'update_rating' ]
   
   const { error } = await supabase.rpc(funcs[func], {
     _movie_id: movie_id,
+    _rating: rating
   });
   
   

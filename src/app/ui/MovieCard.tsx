@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { MovieProps } from '@/app/lib/types'
+import { MovieProps, DictionaryNum } from '@/app/lib/types'
 import Tooltip from '@mui/material/Tooltip';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -20,6 +20,14 @@ import { sqlActionFunc, } from '@/app/lib/actions';
 import MovieModal from '@/app/ui/ModalDefault';
 import truncate from 'truncate';
 
+const cardActions: DictionaryNum = {
+    "Method" : 0,
+    "Favorite" : 1,
+    "Watched" : 2,
+    "rmWatched" : 3,
+    "Rating" : 4
+};
+
 export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardData: MovieProps, imageBaseUrl: string }) {
 
     const { refresh } = useRouter();
@@ -28,24 +36,18 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
 
         switch (watched) {
             case true:
-                sqlActionFunc(movie_id, 3);
+                sqlActionFunc(movie_id, cardActions["rmWatched"]);
                 break;
             case false:
-                sqlActionFunc(movie_id, 2);
+                sqlActionFunc(movie_id, cardActions["Watched"]);
                 break;
         }
         refresh()
     };
 
-    const toggle = (movie_id: number) => {
+    const toggle = (movie_id: number, action: string) => {
 
-        sqlActionFunc(movie_id, 0)
-        refresh()
-    };
-
-    const toggle2 = (movie_id: number) => {
-
-        sqlActionFunc(movie_id, 1)
+        sqlActionFunc(movie_id, cardActions[action])
         refresh()
     };
 
@@ -60,7 +62,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
                             <img
                                 src={`${imageBaseUrl}${MovieCardData.poster_path}`}
                                 alt={truncatedText}
-                                className=' rounded-t-lg'
+                                className='rounded-t-lg'
                                 width={200}
                                 height={75}
                             /> : <BlankMovieCard />
@@ -69,7 +71,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
 
                         {
                             MovieCardData.watched && (
-                                <div className='flex justify-center rounded-full bg-slate-900 p-1' onClick={() => { toggle(MovieCardData.movie_id) }}>
+                                <div className='flex justify-center rounded-full bg-slate-900 p-1' onClick={() => { toggle(MovieCardData.movie_id, "Method") }}>
                                     <button className='flex'>
                                         {(MovieCardData.method ? <TheatersIcon className='hover:text-red-400' /> : <StreamIcon className='hover:text-blue-400' />)}
                                     </button>
@@ -88,7 +90,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
                         </div>
                     </Tooltip>
                     <div className='flex flex-row justify-end z-10 w-full gap-4 p-2'>
-                        <button onClick={() => toggle2(MovieCardData.movie_id)} >
+                        <button onClick={() => toggle(MovieCardData.movie_id, "Favorite")} >
                             {!MovieCardData.favorited ? <FavoriteBorderIcon className='hover:text-red-400' /> : <FavoriteIcon className='hover:text-red-400' />}
                         </button>
                         <button onClick={() => handleClick(MovieCardData.movie_id, MovieCardData.watched || false)}>
@@ -172,7 +174,7 @@ export function DetailedMovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
                 <div className='flex flex-row justify-end z-10 w-full gap-4 py-2'>
 
 
-                    <button onClick={() => toggle2(MovieCardData.movie_id)}>
+                    <button onClick={() => toggle(MovieCardData.movie_id, 1)}>
                         {!MovieCardData.favorited ? <FavoriteBorderIcon /> : <FavoriteIcon />}
                     </button>
                     <button onClick={() => handleClick(MovieCardData.movie_id, MovieCardData.watched || false)}>
@@ -184,11 +186,6 @@ export function DetailedMovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
 
     )
 }
-
-
-
-
-
 
 function BlankMovieCard() {
     return (
