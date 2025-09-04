@@ -53,23 +53,25 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
     );
 }
 
-function TitleCard({ title, total, average }: { title: string, total: number, average?: number }) {
+function TitleCard({ title, total, userExists, average }: { title: string, total: number, userExists: boolean, average?: number }) {
     return (
         <div className='flex flex-col items-end gap-2'>
             <div className='flex md:flex-row flex-col md:gap-4 items-end'>
                 <div className='text-3xl'>{title}</div>
                 <div>{total || 0} Films</div>
-            </div>
-            {average && <div className='flex md:flex-row flex-col gap-2'>
-                <Rating
-                    name="simple-controlled"
-                    value={average}
-                    readOnly
-                /> 
-                <div className='text-white h-0 w-0 md:h-full md:w-full content-center md:block hidden'>
-                    Avg. Rating
+                {average ? <div className='flex flex-row gap-2'>
+                    <Rating
+                        name="simple-controlled"
+                        value={average}
+                        readOnly
+                    />
+                    <div className='text-white content-center'>
+                        Avg. Rating
+                    </div>
                 </div>
-            </div>}
+                    : <FilterCheck userExists={userExists} />
+                }
+            </div>
         </div>
     )
 }
@@ -100,8 +102,9 @@ export function TabGallery({ allTitle, allTotal, wTitle, wTotal, myAvg, userExis
                 <TitleCard
                     title={allTitle}
                     total={allTotal}
+                    userExists={userExists}
                 />
-                <FilterCheck userExists={userExists} />
+
             </div>
 
             <div className='flex p-2 items-center flex-col text-white border-l-1 border-r-1 border-t-1 rounded-t-xl w-full hover:border-red-900'>

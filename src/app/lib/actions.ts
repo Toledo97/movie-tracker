@@ -168,5 +168,6 @@ export async function statActionFunc(){
   if (error) {
     console.error(error)
   }
+  
   return data
 }
