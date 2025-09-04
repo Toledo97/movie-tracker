@@ -54,7 +54,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
     const truncatedText = truncate(MovieCardData.title, 15);
 
     return (
-        <div className='flex-none' >
+        <div className='flex-none text-white' >
             <div className='flex flex-col'>
                 <div className='relative flex flex-col max-w-2xs z-0 justify-end'>
                     <MovieModal MovieData={MovieCardData} imgUrl={imageBaseUrl}>
@@ -63,7 +63,7 @@ export default function MovieCard({ MovieCardData, imageBaseUrl }: { MovieCardDa
                                 src={`${imageBaseUrl}${MovieCardData.poster_path}`}
                                 alt={truncatedText}
                                 className='rounded-t-lg'
-                                width={200}
+                                width={185}
                                 height={75}
                             /> : <BlankMovieCard />
                         }</MovieModal>

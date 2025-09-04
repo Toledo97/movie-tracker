@@ -2,12 +2,15 @@
 
 import * as React from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export default function FilterCheck({ userExists }: { userExists: boolean }) {
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const { replace } = useRouter();
+    const [filter, setFilter] = React.useState(false)
 
     const createFilterURL = (filter: boolean) => {
         const params = new URLSearchParams(searchParams);
@@ -17,22 +20,26 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
         replace(`${pathname}?${params.toString()}`)
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        createFilterURL(event.target.checked);
+    const handleChange = () => {
+        createFilterURL(!filter);
+        setFilter(!filter);
     };
 
     React.useEffect(() => {
-        createFilterURL(false)
+        createFilterURL(false);
+        setFilter(false);
     }, [userExists])
 
     return (
-        <div className='flex flex-row gap-2 content-center'>
+        <div className={`flex flex-row gap-2 content-center ${userExists ? '' : 'hidden'}`}>
 
-            <input
-                type="checkbox"
-                onChange={handleChange}
-                disabled={!userExists}
-            />
+            <div
+                onClick={() => handleChange()}
+                className='hover:text-red-900'
+            >
+                {filter ? <VisibilityOffIcon /> : <VisibilityOffOutlinedIcon />}
+            </div>
+
 
             <div className='text-md'>
                 Filter Watched

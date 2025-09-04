@@ -68,14 +68,13 @@ function BasicModal({ MovieData, imgUrl }: { MovieData: MovieProps, imgUrl: stri
     };
 
     return (
-        // <div >
         <Box sx={style} className='flex flex-col bg-slate-500 rounded-xl text-white h-7/10  my-4'>
             <Typography id="modal-modal-title" variant="h6" component="h2" className=''>
                 <div className='text-center'>
                     <b>{MovieData.title}</b><hr></hr>
                 </div>
             </Typography>
-            <form className='flex md:flex-row flex-col gap-4 overflow-y-auto example'>
+            <form className='flex md:flex-row flex-col gap-4 overflow-y-auto example md:items-start items-center'>
 
                 {MovieData.poster_path !== 'None' &&
                     <div className='flex relative z-0 w-48 h-80'>
@@ -90,7 +89,7 @@ function BasicModal({ MovieData, imgUrl }: { MovieData: MovieProps, imgUrl: stri
                         </div>
                     </div>
                 }
-                <div className='flex flex-col gap-2 '>
+                <div className='flex flex-col gap-2 md:items-start items-center'>
                     <div className='font-bold'>Your Rating</div>
                     <Rating
                         name="simple-controlled"
@@ -130,6 +129,5 @@ function BasicModal({ MovieData, imgUrl }: { MovieData: MovieProps, imgUrl: stri
 
             </form>
         </Box>
-        // </div>
     );
 }

@@ -162,4 +162,11 @@ export async function sqlActionFunc(movie_id: number, func: number, rating?: num
   }
 }
 
-
+export async function statActionFunc(){
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc("total_average_rating");
+  if (error) {
+    console.error(error)
+  }
+  return data
+}
