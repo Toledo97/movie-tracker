@@ -111,6 +111,7 @@ export function TabGallery({ allTitle, allTotal, wTitle, wTotal, myAvg, userExis
                 <TitleCard
                     title={wTitle}
                     total={wTotal}
+                    userExists={userExists}
                     average={myAvg}
                 />
             </div>
