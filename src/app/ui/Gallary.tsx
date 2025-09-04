@@ -8,8 +8,10 @@ import Loading from '@/app/loading';
 import Pagination from '@/app/ui/Pagination';
 import FilterCheck from '@/app/ui/FilterGallary';
 import Rating from '@mui/material/Rating';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 
 import './gallary.css'
+import { withTheme } from '@emotion/react';
 
 export default function Gallary({ MovieData, GallaryData }: { MovieData: MovieProps[], GallaryData: GallaryProps }) {
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500/';
@@ -53,25 +55,37 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
     );
 }
 
-function TitleCard({ title, total, userExists, average }: { title: string, total: number, userExists: boolean, average?: number }) {
+function TitleCard({ title, total, userExists, average, max }: { title: string, total: number, userExists: boolean, max?: number, average?: number }) {
     return (
-        <div className='flex flex-col items-end gap-2'>
-            <div className='flex md:flex-row flex-col md:gap-4 items-end'>
+        <div className='flex flex-col gap-2 items-center'>
+            <div className='flex flex-row gap-2 items-center'>
                 <div className='text-3xl'>{title}</div>
                 <div>{total || 0} Films</div>
-                {average ? <div className='flex flex-row gap-2'>
+            </div>
+
+            {average ?
+                <div className='flex flex-row items-end h-[30px]'>
                     <Rating
                         name="simple-controlled"
                         value={average}
+                        className='pb-2'
                         readOnly
                     />
-                    <div className='text-white content-center'>
-                        Avg. Rating
-                    </div>
-                </div>
-                    : <FilterCheck userExists={userExists} />
-                }
-            </div>
+
+                    <Gauge sx={(theme) => ({
+                        [`& .${gaugeClasses.valueText} text`]: {
+                            fill: "#ffffff",
+                        },
+                        [`& .${gaugeClasses.valueArc}`]: {
+                            fill: '#B71C1C',
+                        },
+                        [`& .${gaugeClasses.referenceArc}`]: {
+                            fill: theme.palette.text.disabled,
+                        },
+                    })} width={50} height={50} value={total} valueMax={60} startAngle={-90} endAngle={90} />
+
+                </div> : <FilterCheck userExists={userExists} />
+            }
         </div>
     )
 }
@@ -111,6 +125,7 @@ export function TabGallery({ allTitle, allTotal, wTitle, wTotal, myAvg, userExis
                 <TitleCard
                     title={wTitle}
                     total={wTotal}
+                    max={allTotal}
                     userExists={userExists}
                     average={myAvg}
                 />
