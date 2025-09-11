@@ -14,7 +14,7 @@ export default async function Page(props: {
 }
 ) {
     const searchParams = await props.searchParams;
-    const filter = searchParams?.f;
+    const filter = searchParams?.f || 1;
     const allMoviesPage = Number(searchParams?.page || 1);
     const WatchedMoviesPage = Number(searchParams?.page2 || 1);
     const query = searchParams?.query || '';
