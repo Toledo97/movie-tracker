@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import { MovieType } from '@/app/lib/types'
+import { string } from 'zod';
 
 const style = {
     // Root class for the input field
@@ -61,8 +62,11 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieType[] }) {
 
         const params = new URLSearchParams(searchParams);
 
-        if (term) {
+
+        if (typeof term == 'string') {
             params.set('query', term);
+        } else if (term) {
+            params.set('query', term.title);
         } else {
             params.delete('query');
         }
@@ -87,7 +91,7 @@ export default function MovieSelect({ MovieData }: { MovieData: MovieType[] }) {
             onChange={(e, value: MovieType | null | string) => {
                 handleSearch(value);
             }}
-            onInputChange={(e, value) => {
+            onInputChange={(e, value: MovieType | null | string) => {
                 handleSearch(value);
             }}
 

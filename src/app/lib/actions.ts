@@ -28,8 +28,8 @@ export async function login(formState: FormState, formData: FormData): Promise<F
   const userData = await supabase.auth.getUser()
   await saveCookies(!!userData.data.user || false)
 
-  revalidatePath('/?f=false&page=1', 'layout')
-  redirect('/?f=false&page=1')
+  revalidatePath('/?f=1&page=1', 'layout')
+  redirect('/?f=1&page=1')
 }
 
 export async function saveCookies(userExists: boolean) {
@@ -49,8 +49,8 @@ export async function logout() {
   if (error) {
     redirect('/error')
   }
-  revalidatePath('/?f=false&page=1', 'layout')
-  redirect('/?f=false&page=1')
+  revalidatePath('/?f=1&page=1', 'layout')
+  redirect('/?f=1&page=1')
 }
 
 
@@ -87,9 +87,9 @@ export async function searchMovies(title: string): Promise<MovieProps[]> {
   return movies || []
 }
 
-export async function getMovies(start: number, end: number, filter: boolean): Promise<MovieProps[]> {
+export async function getMovies(start: number, end: number, filter: number): Promise<MovieProps[]> {
   const supabase = await createClient()
-  const rpc_ = filter ? 'xor_all_watched' : 'all_films_default'
+  const rpc_ = filter == 0 ? 'xor_all_watched' : 'all_films_default'
   const {data: movies, error} = await supabase.rpc(rpc_).range(start, end);
 
   if (error) {

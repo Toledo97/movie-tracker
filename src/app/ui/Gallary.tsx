@@ -55,19 +55,19 @@ export default function Gallary({ MovieData, GallaryData }: { MovieData: MoviePr
     );
 }
 
-function TitleCard({ title, total, userExists, average, max }: { title: string, total: number, userExists: boolean, max?: number, average?: number }) {
+function TitleCard({ title, total, userExists, average, max, card }: { title: string, total: number, userExists: boolean, max?: number, average?: number, card?: boolean }) {
     return (
         <div className='flex flex-col gap-2 items-center'>
             <div className='flex flex-row gap-2 items-center'>
                 <div className='text-3xl'>{title}</div>
-                <div>{total || 0} Films</div>
+                {!card && total}
             </div>
 
-            {average ?
+            {card ?
                 <div className='flex flex-row items-end h-[30px]'>
                     <Rating
                         name="simple-controlled"
-                        value={average}
+                        value={average || 0}
                         className='pb-2'
                         readOnly
                     />
@@ -82,7 +82,7 @@ function TitleCard({ title, total, userExists, average, max }: { title: string, 
                         [`& .${gaugeClasses.referenceArc}`]: {
                             fill: theme.palette.text.disabled,
                         },
-                    })} width={50} height={50} value={total} valueMax={60} startAngle={-90} endAngle={90} />
+                    })} width={50} height={50} value={total || 0} valueMax={max} startAngle={-90} endAngle={90} />
 
                 </div> : <FilterCheck userExists={userExists} />
             }
@@ -128,6 +128,7 @@ export function TabGallery({ allTitle, allTotal, wTitle, wTotal, myAvg, userExis
                     max={allTotal}
                     userExists={userExists}
                     average={myAvg}
+                    card={true}
                 />
             </div>
         </div>

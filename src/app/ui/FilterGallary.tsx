@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import * as React from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
@@ -10,24 +10,24 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const { replace } = useRouter();
-    const [filter, setFilter] = React.useState(false)
+    const [filter, setFilter] = React.useState(true)
 
     const createFilterURL = (filter: boolean) => {
         const params = new URLSearchParams(searchParams);
-        params.set('f', `${filter}`);
+        params.set('f', `${Number(filter)}`);
         params.set('page', '1');
 
         replace(`${pathname}?${params.toString()}`)
     };
 
     const handleChange = () => {
-        createFilterURL(!filter);
         setFilter(!filter);
+        createFilterURL(!filter);
     };
 
     React.useEffect(() => {
-        createFilterURL(false);
-        setFilter(false);
+        setFilter(true);
+        createFilterURL(true);
     }, [userExists])
 
     return (
@@ -37,7 +37,7 @@ export default function FilterCheck({ userExists }: { userExists: boolean }) {
                 onClick={() => handleChange()}
                 className='hover:text-red-900'
             >
-                {filter ? <VisibilityOffIcon /> : <VisibilityOffOutlinedIcon />}
+                {!filter ? <VisibilityOffIcon /> : <VisibilityOffOutlinedIcon />}
             </div>
 
 

@@ -3,7 +3,7 @@ import './Dashboard.css';
 
 import { MovieProps } from '@/app/lib/types';
 import * as React from 'react';
-import Gallary, { TabGallery, DisplayCard } from '@/app/ui/Gallary';
+import { TabGallery, DisplayCard } from '@/app/ui/Gallary';
 import Navbar from "@/app/(dashboard)/NavBar";
 import { createClient } from '@/app/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -11,7 +11,7 @@ import { cookies } from 'next/headers';
 import { getMovieCount, getWatchedMovieCount, getMovies, getWatchedMovies, searchMovies, statActionFunc } from '@/app/lib/actions';
 import { calculateDBIdx } from '@/app/utils/utils';
 
-export default async function Dashboard({ currentPage, currentPage2, term, filter }: { currentPage: number, currentPage2: number, term: string, filter: boolean }) {
+export default async function Dashboard({ currentPage, currentPage2, term, filter }: { currentPage: number, currentPage2: number, term: string, filter: number }) {
     const supabase = await createClient();
     const cookieStore = await cookies();
     const hasCookie = cookieStore.has('user');

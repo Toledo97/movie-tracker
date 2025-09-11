@@ -6,7 +6,7 @@ import { boolean } from 'zod';
 export default async function Page(props: {
     searchParams?: Promise<{
         query?: string;
-        f?: string;
+        f?: number;
         movie_id?: number;
         page?: number;
         page2?: number;
@@ -14,7 +14,7 @@ export default async function Page(props: {
 }
 ) {
     const searchParams = await props.searchParams;
-    const filter = searchParams?.f == 'true' ? true : false;
+    const filter = searchParams?.f;
     const allMoviesPage = Number(searchParams?.page || 1);
     const WatchedMoviesPage = Number(searchParams?.page2 || 1);
     const query = searchParams?.query || '';
